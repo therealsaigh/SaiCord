@@ -1,0 +1,9 @@
+{
+  "name": "SaiCord",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "forwardPorts": [3000],
+  "portsAttributes": {
+    "3000": { "label": "SaiCord", "onAutoForward": "openBrowser" }
+  },
+  "postCreateCommand": "npm install"
+}

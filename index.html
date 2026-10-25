@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SaiCord</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Log in / sign up -->
+  <div id="auth">
+    <form id="auth-form">
+      <h1>SaiCord</h1>
+      <p>Log in or create an account to join the conversation.</p>
+      <label>Username <input id="username" autocomplete="username" required></label>
+      <label>Password <input id="password" type="password" autocomplete="current-password" required></label>
+      <div id="auth-error" role="alert"></div>
+      <div class="actions">
+        <button type="submit" class="primary">Log in</button>
+        <button type="button" id="btn-register">Create account</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Main app -->
+  <div id="app" hidden>
+    <aside id="sidebar">
+      <div class="brand">SaiCord</div>
+      <button id="btn-friends" class="nav">Friends</button>
+      <button id="btn-mod" class="nav" hidden>Moderation</button>
+
+      <div class="section">Public</div>
+      <div id="list-general"></div>
+
+      <div class="section">Direct messages</div>
+      <div id="list-dm"></div>
+
+      <div class="section">Groups <button id="btn-newgroup" class="icon" title="New group">+</button></div>
+      <div id="list-group"></div>
+
+      <div class="me">
+        <div id="me-avatar"></div>
+        <span id="me-name"></span>
+        <button id="btn-settings" class="icon" title="Profile and colors">Settings</button>
+        <button id="btn-logout" class="icon">Log out</button>
+      </div>
+    </aside>
+
+    <main>
+      <section id="chat" hidden>
+        <div id="chat-main">
+        <header id="chat-header">
+          <span id="chat-title"></span>
+          <div class="header-actions">
+            <button class="icon" id="btn-pins">Pins</button>
+            <button class="icon" id="btn-search">Search</button>
+            <button class="icon" id="btn-members">People</button>
+            <div id="group-tools" hidden>
+            <button class="icon" id="btn-rename-group">Rename</button>
+            <button class="icon" id="btn-add-people">Add people</button>
+            <button class="icon" id="btn-leave-group">Leave</button>
+          </div>
+            </div>
+        </header>
+        <div id="messages"></div>
+        <div id="typing" aria-live="polite"></div>
+        <div id="reply-bar" hidden><span id="reply-text"></span><button type="button" class="icon" id="reply-cancel">Cancel</button></div>
+        <div id="mention-pop" hidden></div>
+        <form id="composer">
+          <button type="button" class="icon" id="btn-attach" title="Share an image">Image</button>
+          <input type="file" id="image-file" accept="image/*" hidden>
+          <input id="input" placeholder="Write a message" autocomplete="off" maxlength="2000">
+          <button class="primary">Send</button>
+        </form>
+      </div>
+        <aside id="members"><div id="member-list"></div></aside>
+      </section>
+
+      <section id="friends-panel">
+        <header>Friends</header>
+        <div class="panel-body">
+          <form id="add-friend">
+            <input id="friend-name" placeholder="Add a friend by username" autocomplete="off" required>
+            <button class="primary">Send request</button>
+          </form>
+          <div id="friend-msg"></div>
+
+          <h3>Requests for you</h3>
+          <div id="fr-incoming" class="list"></div>
+          <h3>Requests you sent</h3>
+          <div id="fr-outgoing" class="list"></div>
+          <h3>Your friends</h3>
+          <div id="fr-friends" class="list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Profile and colors -->
+  <dialog id="settings-dialog">
+    <h2>Profile and colors</h2>
+
+    <div class="profile">
+      <div id="avatar-preview"></div>
+      <div class="profile-actions">
+        <button type="button" id="avatar-upload">Upload picture</button>
+        <button type="button" id="avatar-remove">Remove</button>
+        <input type="file" id="avatar-file" accept="image/*" hidden>
+      </div>
+    </div>
+    <div id="avatar-msg" class="hint" role="status"></div>
+    <label>Display name <input id="name-input" maxlength="32" autocomplete="off" placeholder="How your name appears to others"></label>
+    <label>About you <textarea id="bio-input" maxlength="190" rows="3" placeholder="Say a little about yourself"></textarea></label>
+    <div class="actions"><button type="button" id="bio-save">Save profile</button></div>
+    <div class="hint">Your username <b id="my-handle"></b> is what friends type to add you or @mention you.</div>
+    <button type="button" id="notif-btn">Turn on desktop notifications</button>
+
+    <h3>Themes</h3>
+    <div class="presets" id="presets"></div>
+
+    <div id="theme-controls"></div>
+
+    <div class="actions">
+      <button class="primary" id="settings-save">Save colors</button>
+      <button id="settings-reset">Reset to default</button>
+      <button id="settings-cancel">Cancel</button>
+    </div>
+  </dialog>
+
+  <!-- New group -->
+  <dialog id="group-dialog">
+    <h2 id="group-dialog-title">New group chat</h2>
+    <label id="group-name-wrap">Group name <input id="group-name" maxlength="40" autocomplete="off"></label>
+    <div class="hint">Choose friends to add</div>
+    <div id="group-friends"></div>
+    <div id="group-error" role="alert"></div>
+    <div class="actions">
+      <button class="primary" id="group-create">Create group</button>
+      <button id="group-cancel">Cancel</button>
+    </div>
+  </dialog>
+
+  <!-- Someone's profile -->
+  <dialog id="profile-dialog"><div id="profile-body"></div></dialog>
+
+  <!-- Full-size image viewer -->
+  <dialog id="lightbox"><img id="lightbox-img" alt=""></dialog>
+
+  <!-- Pinned messages -->
+  <dialog id="pins-dialog">
+    <h2>Pinned messages</h2>
+    <div id="pins-list"></div>
+    <div class="actions"><button type="button" id="pins-close">Close</button></div>
+  </dialog>
+
+  <!-- Moderation panel -->
+  <dialog id="mod-dialog">
+    <h2>Moderation</h2>
+    <div id="mod-body"></div>
+    <div class="actions"><button type="button" id="mod-close">Close</button></div>
+  </dialog>
+
+  <!-- Search -->
+  <dialog id="search-dialog">
+    <h2>Search messages</h2>
+    <input id="search-input" placeholder="Search your chats" autocomplete="off">
+    <label class="inline"><input type="checkbox" id="search-scope"> Only in this chat</label>
+    <div id="search-results"></div>
+    <div class="actions"><button type="button" id="search-close">Close</button></div>
+  </dialog>
+
+  <div id="toast" role="status" hidden></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
